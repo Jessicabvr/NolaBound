@@ -1,14 +1,12 @@
-const bcrypt =  require('bcrypt')
+
 const passport = require('passport');
 const cloudinary = require('cloudinary')
 const flash = require('express-flash')
 const session = require('express-session')
 const cors = require('cors');
 const formData = require('express-form-data')
-
 require('dotenv').config()
   //this loads all the environment variables and sets them inside of process.env
-
 const express = require('express');
 // const db = require('./db/database.js')
 const {User, Favorites, Markers, Comments} = require('./db/database.js')
@@ -44,42 +42,6 @@ cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 })
-// app.set('view engine', 'ejs')
-//stores variables to be persisted across the session
-app.use(passport.session())
-const checkAuthenticated = (req, res, next) => {
-  //this function checks if the user is logged in
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect('/login')
-}
-const notAuthenticated = (req, res, next) => {
-  //this function checks if the user is not logged in
-  //not working
-  //if the user is logged in
-  if(req.isAuthenticated()){
-    //redirect to the home page
-   return res.redirect('/');
-  }
-  //if they are not authenticated keep going
-  next();
-}
-// initializePassport(passport,
-//    email => User.findOne({where: {}}),
-//   //return db query  find user => user.email === email
-//   id => User.findOne(user => user.id === id)
-// );
-
-//login route to display login page
-// app.get('/login',  (req, res) => {
-//   res.render('/login')
-// })
-//registration route
-// app.get('/register', (req, res) => {
-//   res.render('Login.jsx')
-// })
-//signup route to submit registration
 
 app.get('/markers', (req, res) => {
 
@@ -114,51 +76,33 @@ app.post('/markers', (req, res) => {
           .catch((err) => {
 
           });
-
-
-
     })
   });
+
   app.post('/comments', (req, res) => {
-
     console.log(req.body)
-
-
-  const{comments, description} = req.body
-
-
-
+    const{comments, description} = req.body
         const newComment = new Comments({
           comments,
           description
         });
-
         newComment.save()
           .then((data) => {
             console.log('COMMENTS ADDED');
             res.redirect('/');
-
           })
           .catch((err) => {
-
-            console.log(err)
-
+             console.log(err)
           });
-
-
   });
 
 
   app.post('/create', (req, res) => {
     const values = Object.values(req.files)
-  const promises = values.map(image => cloudinary.uploader.upload(image.path))
-
-
-  const {latitude,
+    const promises = values.map(image => cloudinary.uploader.upload(image.path))
+    const {latitude,
       longitude,
       description} = req.body;
-
-
       Promise
       .all(promises)
       .then(res =>  {
@@ -172,19 +116,13 @@ app.post('/markers', (req, res) => {
         newMarker.save()
         .then((data) => {
           console.log('MARKERS ADDED');
-
-
         })
         .catch((err) => {
           console.log('this is the err we are looking for', err)
-
         });
     })
     .catch(err => console.error('Error creating marker', err))
 })
-
-
-
 
 app.post('/register', (req, res) => {
 
@@ -211,7 +149,6 @@ app.post('/api/favorites', (req, res) => {
   //console.log('APP POST REQ', req.body);
   const {latitude, longitude, description, imageUrl} = req.body;
 
-
   const newFavorite = new Favorites({
     latitude,
     longitude,
@@ -229,46 +166,7 @@ app.post('/api/favorites', (req, res) => {
     });
 });
 
-//app.post('/login', notAuthenticated, passport.authenticate('local', {
 
-//   successRedirect: '/',
-//   failureRedirect: '/',
-//   failureFlash: true
-// })
-
-
-// )
-
-app.post('/login', (req, res, next) => {
-
-
-  const {email, password} = req.body;
-  console.log('login req.body', req.body)
-  return User.findOne({where: {email: req.body.email}}).then((data) => {
-
-    if (data) {
-      console.log('this is login server data', data)
-
-      if(password === data.password){
-        console.log('LOGIN CORRECT')
-        res.redirect('/')
-      } else {
-        console.log('INCORRECT PASSWORD')
-        res.redirect('/');
-      }
-
-      //  bcrypt.compare(password, data.password)
-      // .then((correct) => console.log('login successful'))
-      // .catch((err) => console.log('WRONG PASSWORD', err))
-
-    } else {
-      console.log('DOES NOT WORK')
-      res.status(401).send('USER NOT FOUND');
-
-
-    }
-  });
-});
 app.get('/comments', (req, res) => {
 
   console.log('comment req.body', req.body)
@@ -283,19 +181,12 @@ app.get('/comments', (req, res) => {
 
 });
 
-
-
-
-
 //logout route
 app.get('/logout', (req, res) => {
   req.session = null;
   req.logout()
   res.redirect('/')
 })
-
-
-
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/error', (req, res) => res.send('Unknown Error'))

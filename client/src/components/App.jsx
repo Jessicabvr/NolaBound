@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import GoogleApiWrapper from './Map';
 import axios from 'axios'
+import { Link, Route, Switch } from "react-router-dom";
 
 import CreateMarker from '../components/AddMarker/CreateMarker'
 
@@ -34,7 +35,7 @@ renderView() {
   const { view, lat, lng } = this.state;
   // This will render different views when navigation is clicked
   if (view === 'map') {
-    return <GoogleApiWrapper  handleClick={() => this.changeView('anypostview')}/>;
+    return <GoogleApiWrapper handleClick={() => this.changeView('anypostview')}/>;
   } else if (view === 'addMarker') {
     return <CreateMarker handleClick={() => this.changeView('anypostview')}/>;
   }
@@ -63,18 +64,6 @@ render() {
             onClick={() => this.changeView('map')}>
             Home
           </button>
-
-          {/* <button
-            className={
-              view === 'map'
-                ? 'nav-selected'
-                : 'nav-unselected'
-            }
-            onClick={() => this.changeView('map')}
-          >
-            Map
-          </button> */}
-
 
 <button className="g-logout2" href="#" onClick={function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();

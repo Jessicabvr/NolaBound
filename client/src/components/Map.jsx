@@ -6,8 +6,6 @@ import axios from 'axios'
 
 import { FaRegHeart, FaHeart } from 'react-icons/fa'
 
-
-
 class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -37,9 +35,7 @@ class MapContainer extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.commentFetcher = this.commentFetcher.bind(this);
-
   }
-
   markerFetcher() {
     axios.get('/markers')
     .then((marker) =>{
@@ -63,11 +59,6 @@ class MapContainer extends Component {
       this.setState({
          comments: comment.data
        })
-
-
-
-
-
     } )
     .catch((err) => {
 
@@ -77,12 +68,9 @@ class MapContainer extends Component {
     this.markerFetcher();
     this.commentFetcher();
 
-
   }
 
-
   handleChange(event){
-
     const name = event.target.name;
     this.setState({
       [name]: event.target.value
@@ -90,21 +78,15 @@ class MapContainer extends Component {
   }
   handleSubmit(){
     const {comments} = this.state
-
-
     const data =
      { description: this.state.selectedPlace.name,
       comments: comments
-
     }
     axios.post('/comments', data)
     .then(data => console.log('User Registered'))
 
     .catch((err) => console.log('AXIOS POST ERROR', err))
-
   }
-
-
 
   onHeartClick() {
     console.log(this.state.selectedPlace)
@@ -114,7 +96,7 @@ class MapContainer extends Component {
     const { lat, lng } = position
     const data = {latitude: lat, longitude: lng, description: name, imageUrl: picture}
     axios.post('/api/favorites', data)
-    .then(data => console.log('success'))
+    .then(this.setState({isFavorite: !this.state.isFavorite}))
     .catch(err => console.log(err))
   }
   onMarkerClick (props, marker, e) {
@@ -156,7 +138,8 @@ changeView(option) {
     <h6>{this.state.selectedPlace.name}</h6>
      {this.state.isFavorite ? <FaHeart
           onClick={this.onHeartClick}
-    ></FaHeart> : <FaRegHeart onClick={this.onHeartClick} ></FaRegHeart>
+          style={{ color: 'red' }}
+    ></FaHeart> : <FaRegHeart onClick={this.onHeartClick} style={{ color: 'red' }}></FaRegHeart>
      }
      <a href={this.state.selectedPlace.picture}>ENLARGE PHOTO</a>
       <form  action="/comments" method='POST'   >
@@ -179,7 +162,77 @@ changeView(option) {
  }
 
  render() {
-
+ const mapStyles =  [
+  {
+      "featureType": "landscape.natural",
+      "elementType": "geometry.fill",
+      "stylers": [
+          {
+              "visibility": "on"
+          },
+          {
+              "color": "#e0efef"
+          }
+      ]
+  },
+  {
+      "featureType": "poi",
+      "elementType": "geometry.fill",
+      "stylers": [
+          {
+              "visibility": "on"
+          },
+          {
+              "hue": "#1900ff"
+          },
+          {
+              "color": "#c0e8e8"
+          }
+      ]
+  },
+  {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+          {
+              "lightness": 100
+          },
+          {
+              "visibility": "simplified"
+          }
+      ]
+  },
+  {
+      "featureType": "road",
+      "elementType": "labels",
+      "stylers": [
+          {
+              "visibility": "off"
+          }
+      ]
+  },
+  {
+      "featureType": "transit.line",
+      "elementType": "geometry",
+      "stylers": [
+          {
+              "visibility": "on"
+          },
+          {
+              "lightness": 700
+          }
+      ]
+  },
+  {
+      "featureType": "water",
+      "elementType": "all",
+      "stylers": [
+          {
+              "color": "#7dcdcd"
+          }
+      ]
+  }
+]
    const style = {
     justifyContent: 'center',
     alignItems: 'center',
@@ -206,6 +259,8 @@ onClick={(e) => console.log(e)}
  zoom={12}
  style={style}
  containerStyle={containerStyle}
+ styles={mapStyles}
+ zoomControl={true}
  >
 
 {this.state.markers.map((marker, index) => (
