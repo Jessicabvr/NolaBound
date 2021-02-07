@@ -38,7 +38,8 @@ class Modal extends Component {
   submitForm(data) {
    console.log('line 37, ', data)
    axios.post('http://localhost:3000/create', data)
-   .then(res => console.log(res))
+   .then(this.props.handleCloseModal())
+   .then(this.props.changeView('map'))
      .catch(err => console.log('Error', err))
   }
 
@@ -60,9 +61,15 @@ class Modal extends Component {
       <div className={showHideClassName}>
         <section className="modal-main">
           <form>
+            <label className="instructions">Add Description
           <input placeholder="Description" onChange={this.handleChange} name='description' />
+          </label>
+              <label className="instructions">Add Picture
           <input type="file" placeholder="insert picture" name='picture' id="imagepath" onChange={this.handleFileChange}/>
-          <button type='submit' onClick={this.handleClick}>Add Pin</button>
+          </label>
+          <div>
+          <span><button className="modal-btn" type='submit' onClick={this.handleClick}>Add Pin</button></span>
+          </div>
           </form>
         </section>
       </div>

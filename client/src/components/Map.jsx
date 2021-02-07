@@ -146,13 +146,22 @@ changeView(option) {
       <input type="text" readOnly value={this.state.selectedPlace.name} onBlur={this.value=this.value=='' ? 'default'
          : this.value} name='description'/>
 
-      <label>Comment</label>
-      <input type='text'  id='comments' name='comments'   />
-    <button  type="submit">Post</button>
+      <label>Add Comment
+      <input  type='text'  id='comments' name='comments'   />
+      </label>
+    <button  className="modal-btn" type="submit">Post</button>
     </form>
+    <div>
+      <h1>Comments Section</h1>
+    </div>
 {this.state.comments.map((data, index) => {
   if(data.description === this.state.selectedPlace.name){
-  return <div key={index}>{data.comments}</div>
+    return (
+      <div>
+  <hr className='rounded'></hr>
+    <div key={index}>{data.comments}</div>
+    </div>
+    )
   }
 })}
 
@@ -233,11 +242,12 @@ changeView(option) {
       ]
   }
 ]
+
    const style = {
     justifyContent: 'center',
     alignItems: 'center',
-     width: '67vw',
-     height: '55vh'
+     width: '96vw',
+     height: '85vh'
    }
    const containerStyle = {
     position: 'relative',

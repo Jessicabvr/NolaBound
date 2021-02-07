@@ -37,7 +37,7 @@ renderView() {
   if (view === 'map') {
     return <GoogleApiWrapper handleClick={() => this.changeView('anypostview')}/>;
   } else if (view === 'addMarker') {
-    return <CreateMarker handleClick={() => this.changeView('anypostview')}/>;
+    return <CreateMarker changeView={this.changeView} handleClick={() => this.changeView('anypostview')}/>;
   }
 }
 render() {
@@ -52,36 +52,28 @@ render() {
     <div style={{color: 'black'}}>
       <header>
 
-      <h1 style={{
-        alignSelf: 'normal',
-        color: 'blue'
-        }}>Welcome To Nola Bound</h1>
+      <h1 className="logo"
+        >Welcome To Nola Bound</h1>
         <div className="g-signin2" data-onsuccess="onSignIn"></div>
       </header>
 
         <div className='nav'>
-          <button className='logo'
+          <button className='btn'
             onClick={() => this.changeView('map')}>
             Home
           </button>
-
-<button className="g-logout2" href="#" onClick={function signOut() {
+          <button
+    className="btn"
+    type="button"
+    position="relative"
+    onClick={() => this.changeView('addMarker')}
+    >Add a Pin </button>
+<button className="btn" href="#" onClick={function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
   }}>Sign out</button>
-          <button
-    type="button"
-    position="relative"
-
-    style={
-      {
-        textAlign: 'center',
-        backgroundColor: view === 'addMarker' ? 'green' : null,
-      }}
-    onClick={() => this.changeView('addMarker')}
-    >ADD & DRAG </button>
         </div>
 
           {this.renderView()}
