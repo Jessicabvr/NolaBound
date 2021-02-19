@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import GoogleApiWrapper from './Map';
 import axios from 'axios'
-import { Link, Route, Switch } from "react-router-dom";
-
 import CreateMarker from '../components/AddMarker/CreateMarker'
 
 class App extends Component {
